@@ -8,5 +8,11 @@ using namespace std;
 
 int main()
 {
+    RubiksCube cube;
+    printCube(cube);
+
+    cube.move(F1);
+    printCube(cube);
+
     return 0;
 }

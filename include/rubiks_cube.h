@@ -4,9 +4,12 @@
 #include <cstdint>
 #include <string>
 
+using namespace std;
+
 #define BITS_PER_COLOR 3
 #define NUM_SCRAMBLE_MOVES 30
 
+// Used for printing in color on terminal, see https://stackoverflow.com/a/3219471
 #define TERM_COLOR_RESET "\e[0m"
 #define TERM_COLOR_RED "\e[38;5;196m"
 #define TERM_COLOR_GREEN "\e[38;5;46m"
@@ -57,7 +60,8 @@ enum MoveType { U1 = 0, D1 = 1, R1 = 2, L1 = 3, F1 = 4, B1 = 5 };
 
 const char* moveTypeToString[6] = {"U1", "D1", "R1", "L1", "F1", "B1"};
 const MoveType availableMoves[6] = {U1, D1, R1, L1, F1, B1};
-const char colorToString[6] = {'G', 'O', 'B', 'R', 'W', 'Y'};
+const char* colors[6] = {TERM_COLOR_WHITE, TERM_COLOR_GREEN,  TERM_COLOR_RED,
+                         TERM_COLOR_BLUE,  TERM_COLOR_ORANGE, TERM_COLOR_YELLOW};
 
 struct RubiksCube {
     uint32_t data[6];
@@ -103,6 +107,12 @@ struct RubiksCube {
     }
 
     bool operator!=(const RubiksCube& other) const { return !(*this == other); }
+
+    uint8_t operator()(int face, int index) const
+    {
+        uint32_t mask = MASK_N_BITS_IDX_0 >> (index * BITS_PER_COLOR);
+        return (data[face] & mask) >> (32 - (index + 1) * BITS_PER_COLOR);
+    }
 
     bool isSolved()
     {
@@ -314,43 +324,46 @@ struct RubiksCube {
             }
         }
     }
-
-    int getCubieColor(int face, int index)
-    {
-        uint32_t mask = MASK_N_BITS_IDX_0 >> (index * BITS_PER_COLOR);
-        return (data[face] & mask) >> (32 - (index + 1) * BITS_PER_COLOR);
-    }
-
-    void printCube(const char* title = "Cube State")
-    {
-        printf(">>> %s\n", title);
-        printFace(TERM_COLOR_WHITE, 0);
-        printMiddleFaces();
-        printFace(TERM_COLOR_YELLOW, 5);
-    }
-
-    void printFace(const char* color, int faceIndex)
-    {
-        printf("      %s%d %d %d%s\n", color, getCubieColor(faceIndex, 0), getCubieColor(faceIndex, 1),
-               getCubieColor(faceIndex, 2), TERM_COLOR_RESET);
-        printf("      %s%d %d %d%s\n", color, getCubieColor(faceIndex, 3), getCubieColor(faceIndex, 4),
-               getCubieColor(faceIndex, 5), TERM_COLOR_RESET);
-        printf("      %s%d %d %d%s\n", color, getCubieColor(faceIndex, 6), getCubieColor(faceIndex, 7),
-               getCubieColor(faceIndex, 8), TERM_COLOR_RESET);
-    }
-
-    void printMiddleFaces()
-    {
-        const char* colors[] = {TERM_COLOR_GREEN, TERM_COLOR_RED, TERM_COLOR_BLUE, TERM_COLOR_ORANGE};
-        for (int row = 0; row < 3; ++row) {
-            for (int faceIndex = 1; faceIndex <= 4; ++faceIndex) {
-                printf("%s%d %d %d%s ", colors[faceIndex - 1], getCubieColor(faceIndex, row * 3),
-                       getCubieColor(faceIndex, row * 3 + 1), getCubieColor(faceIndex, row * 3 + 2), TERM_COLOR_RESET);
-            }
-            printf("\n");
-        }
-    }
 };
+
+// clang-format off
+string fmtColorCubie(uint8_t color)
+{
+    return colors[color] + to_string(color) + TERM_COLOR_RESET;
+}
+
+void printCube(RubiksCube c) {
+    cout << ">>>> Cube State" << endl;
+
+    // Print face 0
+    for (int i = 0; i < 3; ++i) {
+        cout << "      ";
+        for (int j = 0; j < 3; j++) {
+            cout << fmtColorCubie(c(0, i * 3 + j)) << " ";
+        }
+        cout << "\n";
+    }
+
+    // Print middle faces
+    for (int i = 0; i < 3; ++i) {
+        for (int j = 1; j <= 4; ++j) {
+            for (int k = 0; k < 3; ++k) {
+                cout << fmtColorCubie(c(j, i * 3 + k)) << " ";
+            }
+        }
+        cout << "\n";
+    }
+
+    // Print face 5
+    for (int i = 0; i < 3; ++i) {
+        cout << "      ";
+        for (int j = 0; j < 3; j++) {
+            cout << fmtColorCubie(c(5, i * 3 + j)) << " ";
+        }
+        cout << "\n";
+    }
+}
+// clang-format on
 
 const RubiksCube SOLVED_CUBE = RubiksCube();
 
