@@ -38,6 +38,7 @@ int main(int argc, char **argv) {
     cout << "Time to execute " << NUM_MOVES << " moves: " << duration << " s" << endl;
     cout << "Average time per move " << 1e9 * duration / (6 * NUM_MOVES) << " ns" << endl;
     
+    // TEST: scramble the cube and make sure the centers dont move
     printf(">>>>>>>> Cube Scramble\n");
 
     cube = RubiksCube();

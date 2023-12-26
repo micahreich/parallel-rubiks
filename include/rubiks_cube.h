@@ -7,6 +7,14 @@
 #define BITS_PER_COLOR 3
 #define NUM_SCRAMBLE_MOVES 30
 
+#define TERM_COLOR_RESET "\e[0m"
+#define TERM_COLOR_RED "\e[38;5;196m"
+#define TERM_COLOR_GREEN "\e[38;5;46m"
+#define TERM_COLOR_YELLOW "\e[38;5;226m"
+#define TERM_COLOR_BLUE "\e[38;5;63m"
+#define TERM_COLOR_WHITE "\e[38;5;231m"
+#define TERM_COLOR_ORANGE "\e[38;5;208m"
+
 const uint32_t MASK_N_BITS = 0xE;
 const uint32_t MASK_N_BITS_IDX_0 = MASK_N_BITS << (31 - BITS_PER_COLOR);
 const uint32_t MASK_N_BITS_IDX_1 = MASK_N_BITS_IDX_0 >> BITS_PER_COLOR;
@@ -94,10 +102,7 @@ struct RubiksCube {
         return true;
     }
 
-    bool operator!=(const RubiksCube& other) const
-    {
-        return !(*this == other);
-    }
+    bool operator!=(const RubiksCube& other) const { return !(*this == other); }
 
     bool isSolved()
     {
@@ -319,40 +324,31 @@ struct RubiksCube {
     void printCube(const char* title = "Cube State")
     {
         printf(">>> %s\n", title);
+        printFace(TERM_COLOR_WHITE, 0);
+        printMiddleFaces();
+        printFace(TERM_COLOR_YELLOW, 5);
+    }
 
-        printf("        %d %d %d                 \n", getCubieColor(0, 0), getCubieColor(0, 1),
-               getCubieColor(0, 2));  // Face A, Row 0
-        printf("        %d %d %d                 \n", getCubieColor(0, 3), getCubieColor(0, 4),
-               getCubieColor(0, 5));  // Face A, Row 1
-        printf("        %d %d %d                 \n", getCubieColor(0, 6), getCubieColor(0, 7),
-               getCubieColor(0, 8));  // Face A, Row 2
+    void printFace(const char* color, int faceIndex)
+    {
+        printf("      %s%d %d %d%s\n", color, getCubieColor(faceIndex, 0), getCubieColor(faceIndex, 1),
+               getCubieColor(faceIndex, 2), TERM_COLOR_RESET);
+        printf("      %s%d %d %d%s\n", color, getCubieColor(faceIndex, 3), getCubieColor(faceIndex, 4),
+               getCubieColor(faceIndex, 5), TERM_COLOR_RESET);
+        printf("      %s%d %d %d%s\n", color, getCubieColor(faceIndex, 6), getCubieColor(faceIndex, 7),
+               getCubieColor(faceIndex, 8), TERM_COLOR_RESET);
+    }
 
-        printf("\n");
-
-        printf("%d %d %d   %d %d %d   %d %d %d   %d %d %d \n", getCubieColor(1, 0), getCubieColor(1, 1),
-               getCubieColor(1, 2),                                             // Face B, Row 0
-               getCubieColor(2, 0), getCubieColor(2, 1), getCubieColor(2, 2),   // Face C, Row 0
-               getCubieColor(3, 0), getCubieColor(3, 1), getCubieColor(3, 2),   // Face D, Row 0
-               getCubieColor(4, 0), getCubieColor(4, 1), getCubieColor(4, 2));  // Face E, Row 0
-        printf("%d %d %d   %d %d %d   %d %d %d   %d %d %d \n", getCubieColor(1, 3), getCubieColor(1, 4),
-               getCubieColor(1, 5),                                             // Face B, Row 1
-               getCubieColor(2, 3), getCubieColor(2, 4), getCubieColor(2, 5),   // Face C, Row 1
-               getCubieColor(3, 3), getCubieColor(3, 4), getCubieColor(3, 5),   // Face D, Row 1
-               getCubieColor(4, 3), getCubieColor(4, 4), getCubieColor(4, 5));  // Face E, Row 1
-        printf("%d %d %d   %d %d %d   %d %d %d   %d %d %d \n", getCubieColor(1, 6), getCubieColor(1, 7),
-               getCubieColor(1, 8),                                             // Face B, Row 2
-               getCubieColor(2, 6), getCubieColor(2, 7), getCubieColor(2, 8),   // Face C, Row 2
-               getCubieColor(3, 6), getCubieColor(3, 7), getCubieColor(3, 8),   // Face D, Row 2
-               getCubieColor(4, 6), getCubieColor(4, 7), getCubieColor(4, 8));  // Face E, Row 2
-
-        printf("\n");
-
-        printf("        %d %d %d                 \n", getCubieColor(5, 0), getCubieColor(5, 1),
-               getCubieColor(5, 2));  // Face F, Row 0
-        printf("        %d %d %d                 \n", getCubieColor(5, 3), getCubieColor(5, 4),
-               getCubieColor(5, 5));  // Face F, Row 1
-        printf("        %d %d %d                 \n", getCubieColor(5, 6), getCubieColor(5, 7),
-               getCubieColor(5, 8));  // Face F, Row 2
+    void printMiddleFaces()
+    {
+        const char* colors[] = {TERM_COLOR_GREEN, TERM_COLOR_RED, TERM_COLOR_BLUE, TERM_COLOR_ORANGE};
+        for (int row = 0; row < 3; ++row) {
+            for (int faceIndex = 1; faceIndex <= 4; ++faceIndex) {
+                printf("%s%d %d %d%s ", colors[faceIndex - 1], getCubieColor(faceIndex, row * 3),
+                       getCubieColor(faceIndex, row * 3 + 1), getCubieColor(faceIndex, row * 3 + 2), TERM_COLOR_RESET);
+            }
+            printf("\n");
+        }
     }
 };
 
