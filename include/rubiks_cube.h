@@ -5,6 +5,7 @@
 #include <string>
 
 #define BITS_PER_COLOR 3
+#define NUM_SCRAMBLE_MOVES 30
 
 const uint32_t MASK_N_BITS = 0xE;
 const uint32_t MASK_N_BITS_IDX_0 = MASK_N_BITS << (31 - BITS_PER_COLOR);
@@ -93,6 +94,11 @@ struct RubiksCube {
         return true;
     }
 
+    bool operator!=(const RubiksCube& other) const
+    {
+        return !(*this == other);
+    }
+
     bool isSolved()
     {
         return data[0] == SOLVED_FACE_0 && data[1] == SOLVED_FACE_1 && data[2] == SOLVED_FACE_2 &&
@@ -156,6 +162,13 @@ struct RubiksCube {
     //     146
     //     */
     // }
+
+    inline void scramble()
+    {
+        for (int i = 0; i < NUM_SCRAMBLE_MOVES; ++i) {
+            move(availableMoves[rand() % 6]);
+        }
+    }
 
     inline void move(MoveType type)
     {
@@ -342,5 +355,7 @@ struct RubiksCube {
                getCubieColor(5, 8));  // Face F, Row 2
     }
 };
+
+const RubiksCube SOLVED_CUBE = RubiksCube();
 
 #endif
