@@ -12,7 +12,7 @@ int main(int argc, char **argv) {
 
     // TEST: initial solved cube
     printf(">>>>>>>> Initial Solved Cube\n");
-    cube.printCube();
+    printCube(cube);
 
     // TEST: try all rotations
     printf(">>>>>>>> Cube Rotations\n");
@@ -44,12 +44,12 @@ int main(int argc, char **argv) {
     cube = RubiksCube();
     cube.scramble();
 
-    assert(cube.getCubieColor(0, 4) == 0);
-    assert(cube.getCubieColor(1, 4) == 1);
-    assert(cube.getCubieColor(2, 4) == 2);
-    assert(cube.getCubieColor(3, 4) == 3);
-    assert(cube.getCubieColor(4, 4) == 4);
-    assert(cube.getCubieColor(5, 4) == 5);
+    assert(cube(0, 4) == 0);
+    assert(cube(1, 4) == 1);
+    assert(cube(2, 4) == 2);
+    assert(cube(3, 4) == 3);
+    assert(cube(4, 4) == 4);
+    assert(cube(5, 4) == 5);
 
     return 0;
 }
