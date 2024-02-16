@@ -42,20 +42,12 @@ const uint32_t NOT_RIGHT_MASK = ~RIGHT_MASK;
 const uint32_t LEFT_MASK = 0xE0703800;
 const uint32_t NOT_LEFT_MASK = ~LEFT_MASK;
 
-const inline uint32_t solvedFace(uint8_t color)
-{
-    return color << (32 - 1 * BITS_PER_COLOR) | color << (32 - 2 * BITS_PER_COLOR) |
-           color << (32 - 3 * BITS_PER_COLOR) | color << (32 - 4 * BITS_PER_COLOR) |
-           color << (32 - 5 * BITS_PER_COLOR) | color << (32 - 6 * BITS_PER_COLOR) |
-           color << (32 - 7 * BITS_PER_COLOR) | color << (32 - 8 * BITS_PER_COLOR) | color << (32 - 9 * BITS_PER_COLOR);
-}
-
-const uint32_t SOLVED_FACE_0 = solvedFace(0x0);
-const uint32_t SOLVED_FACE_1 = solvedFace(0x1);
-const uint32_t SOLVED_FACE_2 = solvedFace(0x2);
-const uint32_t SOLVED_FACE_3 = solvedFace(0x3);
-const uint32_t SOLVED_FACE_4 = solvedFace(0x4);
-const uint32_t SOLVED_FACE_5 = solvedFace(0x5);
+const uint32_t SOLVED_FACE_0 = 0b00000000000000000000000000000000;
+const uint32_t SOLVED_FACE_1 = 0b00100100100100100100100100100000;
+const uint32_t SOLVED_FACE_2 = 0b01001001001001001001001001000000;
+const uint32_t SOLVED_FACE_3 = 0b01101101101101101101101101100000;
+const uint32_t SOLVED_FACE_4 = 0b10010010010010010010010010000000;
+const uint32_t SOLVED_FACE_5 = 0b10110110110110110110110110100000;
 
 const char* moveTypeToString[6] = {"U1", "D1", "R1", "L1", "F1", "B1"};
 const MoveType availableMoves[6] = {U1, D1, R1, L1, F1, B1};
@@ -69,13 +61,6 @@ RubiksCube::RubiksCube() : data{SOLVED_FACE_0, SOLVED_FACE_1, SOLVED_FACE_2, SOL
 
 bool RubiksCube::operator==(const RubiksCube& other)
 {
-    // return data[0] == other.data[0] &&
-    //        data[1] == other.data[1] &&
-    //        data[2] == other.data[2] &&
-    //        data[3] == other.data[3] &&
-    //        data[4] == other.data[4] &&
-    //        data[5] == other.data[5];
-
     for (int i = 0; i < 6; ++i) {
         if (data[i] != other.data[i]) {
             printf("%d,   %d", data[i], other.data[i]);
