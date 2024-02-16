@@ -1,6 +1,6 @@
 # Variables
 CXX = g++
-CXXFLAGS = -std=c++17 -Wall -Iinclude
+CXXFLAGS = -std=c++20 -Wall -Iinclude
 LDFLAGS = -pthread
 SRC_DIR = src
 TEST_DIR = tests
@@ -12,10 +12,10 @@ all: $(BIN_DIR)/main
 
 test: $(BIN_DIR)/test_rubiks_cube
 
-$(BIN_DIR)/main: $(OBJ_DIR)/main.o
+$(BIN_DIR)/main: $(OBJ_DIR)/main.o $(OBJ_DIR)/rubiks_cube.o
 	$(CXX) $(CXXFLAGS) $^ -o $@
 
-$(BIN_DIR)/test_rubiks_cube: $(TEST_DIR)/test_rubiks_cube.cpp
+$(BIN_DIR)/test_rubiks_cube: $(TEST_DIR)/test_rubiks_cube.cpp $(OBJ_DIR)/rubiks_cube.o
 	$(CXX) $(CXXFLAGS) $(LDFLAGS) $^ -o $@
 
 $(OBJ_DIR)/%.o: $(SRC_DIR)/%.cpp
