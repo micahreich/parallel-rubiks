@@ -18,8 +18,10 @@ int main(int argc, char **argv) {
     printf(">>>>>>>> Cube Rotations\n");
     for (auto m : availableMoves) {
         cube = RubiksCube();
-        cube.move(m);
-        for (int i = 0; i < 3; ++i) cube.move(m);
+        
+        for (int i = 0; i < 4; ++i) {
+            cube.move(m);
+        }
         assert(cube == SOLVED_CUBE && "Cube is not re-solved after cyclic 4 moves");
     }
 

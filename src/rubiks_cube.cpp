@@ -63,12 +63,22 @@ const MoveType availableMoves[6] = {U1, D1, R1, L1, F1, B1};
 const char* colors[6] = {TERM_COLOR_WHITE, TERM_COLOR_GREEN,  TERM_COLOR_RED,
                          TERM_COLOR_BLUE,  TERM_COLOR_ORANGE, TERM_COLOR_YELLOW};
 
+const RubiksCube SOLVED_CUBE = RubiksCube();
+
 RubiksCube::RubiksCube() : data{SOLVED_FACE_0, SOLVED_FACE_1, SOLVED_FACE_2, SOLVED_FACE_3, SOLVED_FACE_4, SOLVED_FACE_5} {}
 
 bool RubiksCube::operator==(const RubiksCube& other)
 {
+    // return data[0] == other.data[0] &&
+    //        data[1] == other.data[1] &&
+    //        data[2] == other.data[2] &&
+    //        data[3] == other.data[3] &&
+    //        data[4] == other.data[4] &&
+    //        data[5] == other.data[5];
+
     for (int i = 0; i < 6; ++i) {
         if (data[i] != other.data[i]) {
+            printf("%d,   %d", data[i], other.data[i]);
             return false;
         }
     }
@@ -561,4 +571,5 @@ void printCube(const RubiksCube& cube) {
         std::cout << "\n";
     }
 }
+
 // clang-format on

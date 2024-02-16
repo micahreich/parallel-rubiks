@@ -22,7 +22,7 @@ public:
     uint8_t operator()(int face, int index) const;
 };
 
-const RubiksCube SOLVED_CUBE = RubiksCube();
+extern const RubiksCube SOLVED_CUBE;
 
 void printCube(const RubiksCube& cube);
 
